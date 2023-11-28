@@ -1,11 +1,11 @@
-import GamePage from '../Pages/GamePage';
 import HomePage from '../Pages/HomePage';
-import NewPage from '../Pages/NewPage';
+import DashboardPage from '../Pages/DashboardPage';
 
 const routes = {
   '/': HomePage,
-  '/game': GamePage,
-  '/new': NewPage,
+  '/dashboard': DashboardPage,
 };
+
+
 
 export default routes;

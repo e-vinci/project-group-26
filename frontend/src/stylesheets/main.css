@@ -1,0 +1,47 @@
+
+
+.chart-container {
+    width: 35%;
+    margin: 50px;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+
+/* Ajoutez des styles pour la zone de défilement */
+.zone-defilement {
+    height: 300px; /* Hauteur fixe de la zone de défilement */
+    overflow-y: auto; /* Active le défilement vertical si nécessaire */
+  }
+  
+  /* Ajoutez des styles de base pour améliorer la présentation */
+  .etudiant {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  button {
+    margin-left: 10px;
+  }
+  
+
+/* Styles pour la barre de navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333; /* Remplacez par la couleur de fond de votre barre de navigation */
+  z-index: 3; /* Assure que la barre de navigation est au-dessus du reste du contenu */
+}
+
+/* Styles pour le menu déroulant */
+#selectEtudiants {
+  position: fixed;
+  top: 60px; /* Ajustez la position en fonction de la hauteur de votre barre de navigation */
+  left: 10px;
+  z-index: 2; /* Assure que le menu déroulant est en dessous de la barre de navigation */
+  width: 700px;
+}
