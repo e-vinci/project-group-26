@@ -52,7 +52,7 @@ async function TableOfStudent() {
                 console.log('Étudiant :', student);
                 const option = document.createElement('option');
                 option.value = student.email;
-                option.text = `${student.firstName} ${student.lastName} - ${student.email}`;
+                option.text = `${student.name} - ${student.username}`;
                 selectEtudiants.appendChild(option);
             });
         } else {
