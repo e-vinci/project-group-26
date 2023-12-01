@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import Typewriter from 'typewriter-effect/dist/core';
 import '../../stylesheets/home.css';
 

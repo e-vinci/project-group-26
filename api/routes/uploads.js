@@ -19,8 +19,8 @@ router.post('/', (req, res) => {
   const annee = req?.body?.content?.trim().length !== 0 ? req.body.annee : undefined;
   const section = req?.body?.content?.trim().length !== 0 ? req.body.section : undefined;
   const cours = req?.body?.content?.trim().length !== 0 ? req.body.cours : undefined;
-  const lien_synthese = "test_lien";
-  const etudiant_mail = req?.body?.content?.trim().length !== 0 ? req.body.etudiant_mail : undefined;
+  const lienSynthese = 'test_lien';
+  const etudiantMail = req?.body?.content?.trim().length !== 0 ? req.body.etudiant_mail : undefined;
   const likes =
     typeof req?.body?.likes !== 'number' || req.body.likes < 0
       ? undefined
