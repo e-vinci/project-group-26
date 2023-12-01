@@ -43,11 +43,11 @@ module.exports = {
     historyApiFallback: true, // serve index.html instead of routes leading to no specific ressource
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3000/',
         pathRewrite: { '^/api': '' },
       },
     },
-  },
+    },
   module: {
     rules: [
       {

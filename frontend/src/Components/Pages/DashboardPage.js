@@ -2,6 +2,8 @@ import Chart from 'chart.js/auto';  // Importez Chart.js
 import { clearPage } from '../../utils/render';
 
 
+
+
 const main = document.querySelector('main');
 
 
@@ -9,51 +11,66 @@ const main = document.querySelector('main');
 const DashboardPage = () => {
     clearPage()
     TableOfStudent();
-    nbDownloadAndUpload();
     graphForNumberVisit();   
 };
 
 
 
 // Fonction pour afficher les informations de l'étudiant sélectionné
-function afficherInfoEtudiant() {
-    const selectEtudiants = document.getElementById('selectEtudiants');
-    const selectedId = selectEtudiants.value;
-
-    // Vous pouvez ajouter ici le code pour afficher les informations de l'étudiant sélectionné
-    console.log(`Étudiant sélectionné (ID): ${selectedId}`);
-}
-
-function TableOfStudent() {
+async function TableOfStudent() {
     main.innerHTML += `
+        <h1>Liste des Étudiants</h1>
+        
+        <label for="selectEtudiants">Sélectionnez un étudiant :</label>
         <select class="form-select" id="selectEtudiants" aria-label="Sélectionnez un étudiant">
             <option selected disabled>Choisissez un étudiant</option>
         </select>
     `;
 
-    // Fonction pour créer les options du menu déroulant
-    function creerOptionsMenuDeroulant() {
+    try {
+        const response = await fetch('/api/users');
+        const students = await response.json();
+
+
+
+        console.log('Étudiants récupérés depuis l\'API :', students); // Ajoutez cette ligne
+
+
         const selectEtudiants = document.getElementById('selectEtudiants');
-        const etudiants = document.querySelectorAll('.etudiant');
 
-        etudiants.forEach(etudiant => {
-            const nom = etudiant.textContent.trim();
-            const id = etudiant.getAttribute('data-id');
+        // Option par défaut
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.text = 'Choisissez un étudiant';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectEtudiants.appendChild(defaultOption);
+
+
+        if (students.length > 0) {
+            students.forEach(student => {
+                console.log('Étudiant :', student);
+                const option = document.createElement('option');
+                option.value = student.email;
+                option.text = `${student.firstName} ${student.lastName} - ${student.email}`;
+                selectEtudiants.appendChild(option);
+            });
+        } else {
+            console.log('Aucun étudiant trouvé');
             const option = document.createElement('option');
-            option.value = id;
-            option.textContent = nom;
+            option.text = 'Aucun étudiant trouvé';
             selectEtudiants.appendChild(option);
-        });
-
-        // Attacher l'événement onchange après la création des options
-        selectEtudiants.addEventListener('change', afficherInfoEtudiant);
+        }
+        
+    } catch (error) {
+        console.error('Erreur lors de la récupération des étudiants', error);
+        // Gérer l'erreur de manière appropriée, par exemple, afficher un message à l'utilisateur
     }
-
-    // Appeler la fonction pour créer les options lors du chargement de la page
-    window.onload = function () {
-        creerOptionsMenuDeroulant();
-    };
 }
+
+// Appel de la fonction une fois le DOM chargé
+document.addEventListener('DOMContentLoaded', TableOfStudent);
+
 
 
 
@@ -88,12 +105,5 @@ function graphForNumberVisit() {
 }
 
 
-
-
-//--------------------------------------------------------------------------------------
-function nbDownloadAndUpload() {
-
-    main.innerHTML += `<h1>Bonjour les gars</h1>`
-}
 
 export default DashboardPage;
