@@ -1,4 +1,9 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Typewriter from 'typewriter-effect/dist/core';
+import { myMSALObj } from '../Azure/AzureConfig';
+import { signIn, signOut } from '../Azure/Log';
+// import Navigate from '../Router/Navigate';
+import Navbar from '../Navbar/Navbar';
 import '../../stylesheets/home.css';
 
 
@@ -42,11 +47,6 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div class="link">
-            <h3>Participe dès maintenant</h3>
-            <a href="/vincigenius"><button class="btn btn-primary">Me Connecter</button></a>
-          </div>
-
       </div>
 
   </section>
@@ -60,7 +60,44 @@ const HomePage = () => {
 
   main.innerHTML = mainOk; 
 
-  const app = document.querySelector('#presentation')
+
+
+
+const signInButton = document.querySelector('#presentation');
+  const currentAccounts = myMSALObj.getAllAccounts();
+  
+  if(currentAccounts.length===0){
+    signInButton.innerHTML='Me Connecter'
+  }
+  else{
+    signInButton.innerHTML='Me Deconnecter'
+  } 
+  // Ajoutez une variable pour représenter l'état de la connexion
+  let isLoggedIn = currentAccounts.length > 0;
+
+  // Mettez à jour l'état de la connexion en fonction de la longueur de currentAccounts
+  const updateLoginStatus = () => {
+    isLoggedIn = currentAccounts.length > 0;
+  };
+
+  signInButton.addEventListener('click', async () => {
+    try {
+      if (!isLoggedIn) {
+        await signIn();
+        currentAccounts.length = 1;
+        updateLoginStatus(); // Mettez à jour l'état de la connexion
+        Navbar();
+      } else {
+        await signOut();
+        currentAccounts.length = 0;
+        updateLoginStatus(); // Mettez à jour l'état de la connexion
+      }
+    } catch (error) {
+      console.error("Error during sign-in/sign-out:", error);
+    }
+  }); 
+
+  const app = document.querySelector('#presentation');
   const typewriter = new Typewriter(app, {
     loop: false,
     delay: 75,
@@ -76,5 +113,6 @@ const HomePage = () => {
     .typeString('Connecte toi au plus vite pour profiter des synthèses d\'autre étudiants')
     .start();
 };
+
 
 export default HomePage;

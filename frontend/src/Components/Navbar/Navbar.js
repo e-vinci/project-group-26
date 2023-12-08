@@ -5,12 +5,18 @@
  * - the router will show the Page associated to this URI when the user click on a nav-link
  */
 
+import { myMSALObj } from '../Azure/AzureConfig';
+import { signOut, signIn } from '../Azure/Log';
+
+
 import '../../stylesheets/navbar.css';
 import Logo from '../../img/favicon-0.png';
 
+
 const Navbar = () => {
+
   const navbarWrapper = document.querySelector('#navbarWrapper');
-  const navbar = `
+  navbarWrapper.innerHTML = `
 
   <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
   <div class="container-fluid">
@@ -44,13 +50,20 @@ const Navbar = () => {
         <li class="nav-item d-lg-none">
           <a class="nav-link" data-uri="/profil"><i class="bi bi-person"></i>Mon Profil</a>
         </li>
+        <li class="nav-item d-lg-none">
+          <a><i class="bi bi-box-arrow-right"></i><button class="btn btn-primary"></button></a>
+        </li>
+
       </ul>
 
       <!-- Ajout d'une nouvelle div pour afficher "Mon Profil" sur des écrans de taille supérieure à 1000px -->
       <div class="d-none d-lg-block ms-auto">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex align-items-center">
           <li class="nav-item">
           <a class="nav-link" data-uri="/profil"><i class="bi bi-person"></i>Mon Profil</a>
+          </li>
+          <li class="nav-item-log">
+          <button class="btn btn-primary" id="SignIn"></button>
           </li>
         </ul>
       </div>
@@ -58,23 +71,45 @@ const Navbar = () => {
     </div>
 
   </div>
-</nav>
-`;
-         
-  navbarWrapper.innerHTML = navbar;
-  
+</nav> 
+` 
+;
+
+  const signInButton = document.querySelector('#SignIn');
+  const userAccounts = myMSALObj.getAllAccounts();
+
+  if (userAccounts.length <= 0) {
+    signInButton.innerHTML='Me Connecter';
+      signInButton.addEventListener('click', () => {
+      signIn();
+    }) 
+  } else {
+    signInButton.innerHTML='Me Deconnecter';
+      signInButton.addEventListener('click', () => {
+      signOut();
+    }) 
+  }
+
+  // CHANGE L'ICON HAMBURGER
+  const initializeNavbar = () => {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarIcon = document.querySelector('.navbar-toggler i');
+
+    if (navbarToggler && navbarIcon) {
+      navbarToggler.addEventListener('click', () => {
+        // Toggle entre les classes d'icône Bootstrap
+        navbarIcon.classList.toggle('bi-list');
+        navbarIcon.classList.toggle('bi-x');
+      });
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeNavbar();
+  });
+
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const navbarToggler = document.querySelector('.navbar-toggler');
-  const navbarIcon = document.querySelector('.navbar-toggler i');
-
-  navbarToggler.addEventListener('click', () => {
-    // Toggle entre les classes d'icône Bootstrap
-    navbarIcon.classList.toggle('bi-list');
-    navbarIcon.classList.toggle('bi-x');
-  });
-});
 
 
 

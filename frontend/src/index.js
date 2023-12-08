@@ -6,14 +6,7 @@ import HomePage from './Components/Pages/HomePage';
 import VinciGeniusPage from './Components/Pages/VinciGeniusPage';
 import Router from './Components/Router/Router';
 
-
-
 Navbar();
 HomePage();
 VinciGeniusPage();
 Router();
-
-
-
-
-

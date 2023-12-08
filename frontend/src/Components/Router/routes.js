@@ -5,9 +5,9 @@ import ProfilPage from '../Pages/ProfilPage';
 
 const routes = {
   '/': HomePage,
-  '/upload': UploadPage,
-  '/vincigenius': VinciGeniusPage,
   '/profil': ProfilPage,
+  '/upload': UploadPage,
+  '/vincigenius': VinciGeniusPage
 };
 
 export default routes;

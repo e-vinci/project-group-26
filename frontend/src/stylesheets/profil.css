@@ -45,8 +45,8 @@
     color: black;
     padding: 8px;
     margin: 0% 2%;
-    background-color: var(--color-prems);
     border-radius: 20px;
+    border: var(--color-prems) solid 1px;
     &:hover {
       cursor: pointer;
       background-color: var(--color-btn-hover);
@@ -54,7 +54,7 @@
   }
   
   .profil-container .profil .profil-top .link-profil i {
-    color: white;
+    color: var(--color-prems);
   }
 
 
