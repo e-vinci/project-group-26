@@ -1,0 +1,105 @@
+
+.chart-container {
+  width: 35%;
+  margin: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Styles pour la barre de navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333; /* Remplacez par la couleur de fond de votre barre de navigation */
+  z-index: 3; /* Assure que la barre de navigation est au-dessus du reste du contenu */
+}
+
+/* Styles pour le menu déroulant */
+#selectEtudiants {
+  position: fixed;
+  top: 80px; /* Ajustez la position en fonction de la hauteur de votre barre de navigation */
+  left: 10px;
+  z-index: 2; /* Assure que le menu déroulant est en dessous de la barre de navigation */
+  width: 550px;
+}
+
+.bulle-info {
+  width: 300px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;  
+  background-color: white;
+  border: 1px solid #ffe185;
+  box-shadow: 1px 1px 2px var(--color-bg);
+  margin: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  position: fixed; /* Utilisez "fixed" pour positionner par rapport à la fenêtre */
+  top: 80px; /* Ajustez la valeur en fonction de votre préférence */
+  right: 10px; /* Ajustez la valeur en fonction de votre préférence */
+  overflow: hidden;
+  transition: .15s all ease-in-out;
+  z-index: 999; /* Assurez-vous que la div est au-dessus des autres éléments */
+  &:hover {
+    transform: scale(1.1);
+  };
+}
+
+.bottom-left-form {
+  position: fixed;
+  bottom: 10px;
+  left:  210px;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: block;
+  width: 400px;
+  text-align: center;
+}
+.bottom-left-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* styles.css */
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to the top of the container */
+  z-index: 1000;
+  overflow: auto; /* Allow scrolling if the content overflows the screen */
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+}
