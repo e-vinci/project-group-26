@@ -1,20 +1,28 @@
+.first-home {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; 
+} 
+
 .home {
     width: 100%;
-    height: 93vh;
-    top: 0;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 0%;
     background-image: url("../img/49e0ab94-6685-4155-9b1e-3a21e88846d3.svg");
     background-size: 80%;
     background-position-y: -200px;
     background-repeat: no-repeat;
-
+    background-color: white;
   }
 
   .home img {
     width: 100px;
     height: 100px;
+    
   }
 
   .main-container-home {
@@ -61,7 +69,7 @@
   }
 
   .home-container {
-    background-image: url('../img/12065244_4882405.svg');
+    background-image: url('../img/bg.png');
     background-size: 70%;
     background-repeat: no-repeat;
     background-position: center;
@@ -82,7 +90,7 @@
   }
 
   .home-container .home-txt .introTxt {
-    width: 100%;
+    width: 90%;
   }
   
   .home-container .home-txt .introTxt h1 {
@@ -128,3 +136,131 @@
     width: 300px;
     border-radius: 20px;
   }
+
+
+  
+  .AnimeV {
+    z-index: 1;
+    /* Autres styles ... */
+  }
+  
+  .AnimeV2 {
+    z-index: 2;
+    /* Autres styles ... */
+  }
+  
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  .AnimeV,
+  .AnimeV2 {
+    font-family: Montserrat, sans-serif;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background: #ffc55a;
+    line-height: 1.7;
+    color: #fff;
+    overflow: hidden;
+    margin-top: 4%;
+  }
+  
+  .AnimeV {
+    transform: skewY(-5deg);
+    z-index: 1; /* Valeur de z-index différente pour la première animation */
+  }
+  
+  .AnimeV2 {
+    transform: skewY(5deg);
+    z-index: 2; /* Valeur de z-index différente pour la deuxième animation */
+  }
+  
+  .bg-text-container,
+  .bg-text-container2 {
+    transform: translateX(-50%);
+    left: 50%;
+    position: absolute;
+  }
+  
+  @keyframes text-scrolling {
+    0% {
+      transform: translate3d(-100%, 0, 0);
+    }
+    100% {
+      transform: translate3d(0%, 0, 0);
+    }
+  }
+  
+  .animate-text,
+  .animate-text2 {
+    animation: text-scrolling 20s linear infinite;
+    will-change: transform;
+    display: block;
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  .animate-text.left,
+  .animate-text2.left2 {
+    animation-direction: reverse;
+  }
+  
+  .AnimeV span,
+  .AnimeV2 span {
+    font-size: 280px;
+    color: transparent;
+    -webkit-text-stroke: 2px #30442a;
+    text-transform: uppercase;
+    display: inline-block;
+    line-height: 0.75;
+    min-width: auto;
+    font-weight: 800;
+  }
+  
+  .AnimeV .container,
+  .AnimeV2 .container2 {
+    padding: 30px;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .AnimeV .container .col,
+  .AnimeV2 .container2 .col2 {
+    max-width: 600px;
+    margin: 0;
+  }
+  
+   .container h1,
+   .container2 h1{
+    font-size: 70px;
+    font-weight: 500;
+
+   
+
+  }
+  
+  p .container,
+  p .container2 {
+    font-size: 18px;
+    font-weight: 200;
+    margin: 0;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  /* Appliquer la couleur de fond à tout le site sauf la partie jaune */
+
+  
+ 
+  
+

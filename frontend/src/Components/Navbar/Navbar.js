@@ -10,7 +10,7 @@ import { signOut, signIn } from '../Azure/Log';
 
 
 import '../../stylesheets/navbar.css';
-import Logo from '../../img/favicon-0.png';
+import Logo from '../../img/favicon-0-removebg-preview.png';
 
 
 const Navbar = () => {
@@ -40,7 +40,7 @@ const Navbar = () => {
           <a class="nav-link" data-uri="/upload"><i class="bi bi-upload"></i>Upload</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-uri="/"><i class="bi bi-bookmark"></i>Bibliothèque</a>
+          <a class="nav-link" data-uri="/bibliopage"><i class="bi bi-bookmark"></i>Bibliothèque</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" data-uri="/"><i class="bi bi-chat"></i>Chat</a>

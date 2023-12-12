@@ -2,17 +2,27 @@ import { clearPage } from '../../utils/render';
 import '../../stylesheets/upload.css';
 import { addSynthese } from '../../models/syntheses';
 import Navigate from '../Router/Navigate';
+import { myMSALObj } from '../Azure/AzureConfig';
+
 
 
 
 const UploadPage = () => {
+
+  const currentAccounts = myMSALObj.getAllAccounts();
+  if(currentAccounts.length===0){
+    Navigate('/');
+    return;
+  }
+
+
   clearPage();
   const uploadPage = document.querySelector('main');
   uploadPage.innerHTML = `
 
   <div id="mainSynthese">
 
-    <form id="formPostSynthese">
+    <form id="formPostSynthese" enctype='multipart/form-data'>
 
       <h1> Publier une synthèse </h1>
 
@@ -63,6 +73,7 @@ const UploadPage = () => {
   const section = document.querySelector('#selectSection');
   const cours = document.querySelector('#selectCours');
   const lienSynthese = document.querySelector('#lienSynthese');
+  const user = currentAccounts[0];
 
   myForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -74,7 +85,8 @@ const UploadPage = () => {
       section: section.value,
       cours: cours.value,
       lien_synthese: lienSynthese.value,
-      etudiant_mail: "test@gmail.com",
+      etudiant_mail: user.username,
+      etudiant_nom: user.name,
       likes: Number(0),
       telechargements: Number(0),
     };
@@ -82,6 +94,9 @@ const UploadPage = () => {
     await addSynthese(syntheseCreated);
     Navigate('/');
   });
+
+ 
+
 };
 
 

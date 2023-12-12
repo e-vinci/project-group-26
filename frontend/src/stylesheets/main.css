@@ -3,8 +3,9 @@
   
   --color-prems:  #fbc72c;
   --color-prems-hover: #ffe185;
+  --color-bg-navbar: #ffc55a;
   --color-btn: #274eab;
-  --color-txt: #474448;
+  --color-txt: #1e2134;
   --color-bg: white;
   --color-footer : #031B34;
   --color-card: #2E2E2E;
@@ -23,13 +24,12 @@
 body{
     width: 100%;
     height: 93vh;
-    background-color: #fffdfd;
+    background-color: var(--color-bg);
     position: relative;
 }
 
 a {
   color: var(--color-txt);
-  border: none;
 }
 
 i {

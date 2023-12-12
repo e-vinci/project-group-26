@@ -22,7 +22,6 @@ const ProfilPage = async () => {
             </div>
 
             <div class="username d-flex justify-content-center align-items-center flex-column">
-              <h3>zkAli</h3>
               <h6 id="name"></h6>
             </div>
 

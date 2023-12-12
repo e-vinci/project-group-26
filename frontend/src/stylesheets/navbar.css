@@ -1,5 +1,10 @@
-.navbar {
+
+#navbarWrapper {
     background-color: white;
+
+}
+.navbar {
+    background-color: var(--color-bg-navbar);
     padding: 5px;
     position: relative;
     /* border: black solid; */
@@ -17,6 +22,7 @@
       position: relative;
       display: inline;
       cursor: pointer;
+      color: var(--color-txt);
   }
   
   .nav-item .nav-link::after {

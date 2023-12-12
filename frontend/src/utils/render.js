@@ -9,6 +9,10 @@ const renderPageTitle = (title) => {
   const pageTitle = document.createElement('h4');
   pageTitle.innerText = title;
   main.appendChild(pageTitle);
+
 };
 
+
+
 export { clearPage, renderPageTitle };
+
