@@ -9,7 +9,7 @@ function readAllSyntheses() {
   return syntheses;
 }
 
-function createSynthese(titre, description, annee, section, cours, lien_synthese, etudiant_mail, likes, telechargements) {
+function createSynthese(titre, description, annee, section, cours, lien_synthese, etudiant_mail, etudiant_nom, likes, telechargements) {
   const syntheses = parse(jsonDbPath);
 
   const createdSynthese = {
@@ -21,6 +21,7 @@ function createSynthese(titre, description, annee, section, cours, lien_synthese
     cours,
     lien_synthese,
     etudiant_mail,
+    etudiant_nom,
     likes,
     telechargements,
   };
