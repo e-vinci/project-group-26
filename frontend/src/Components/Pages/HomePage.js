@@ -1,89 +1,115 @@
-import { clearPage } from '../../utils/render';
-import '../../stylesheets/upload.css';
-import { addSynthese } from '../../models/syntheses';
-import Navigate from '../Router/Navigate';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Typewriter from 'typewriter-effect/dist/core';
+import { myMSALObj } from '../Azure/AzureConfig';
+import { signIn, signOut } from '../Azure/Log';
+// import Navigate from '../Router/Navigate';
+import Navbar from '../Navbar/Navbar';
+import '../../stylesheets/home.css';
 
 
+const HomePage = () => {
+  const main = document.querySelector('main');
+  const mainOk = `
 
-const UploadPage = () => {
-  clearPage();
-  const uploadPage = document.querySelector('main');
-  uploadPage.innerHTML = `
+  <section class="home">
+  
+  <section class="main-container-home">
 
-  <div id="mainSynthese">
+      <div class="home-data">
 
-    <form id="formPostSynthese">
+          <div class="bulle-info">
+            <h5>Documents</h5>
+            <h3><span style="color: #fbc72c;" >14 250</span></h3>
+          </div>
 
-      <h1> Publier une synthèse </h1>
+          <div class="bulle-info">
+            <h5>Etudiants</h5>
+            <h3><span style="color: #fbc72c;" >5 418 </span></h3>
+          </div>
 
-      <div class="form-group">
-        
-        <input type="title" class="form-control" id="titre" aria-describedby="titleHelp" placeholder="Entrez un titre">
+          <div class="bulle-info">
+            <h5>Documents</h5>
+            <h3><span style="color: #fbc72c;" >5 418 </span></h3>
+          </div>
+    
       </div>
 
-      <div class="form-group">
-        <textarea class="form-control" id="description" rows="3" placeholder="Entrez une description"></textarea>
+  </section>
+
+  <section class="home-container">
+
+      <div class="home-txt">
+
+          <div class="introTxt">
+            <h1 id="title"> <span style="color: #fbc72c;" >Vinci Genius</span> aux services des étudiants. </h1>
+            <div class="bulle-info">
+              <p id="presentation"></p>
+            </div>
+          </div>
+
       </div>
 
-      <div class="form-group select">
-        <select class="custom-select mr-sm-2" id="selectAnnee">
-          <option selected>Année</option>
-          <option value="1">1</option>
-        </select>
+  </section>
 
-        <select class="custom-select mr-sm-2" id="selectSection">
-          <option selected>Section</option>
-          <option value="1">BIN</option>
-        </select>
-
-        <select class="custom-select mr-sm-2" id="selectCours">
-          <option selected>Cours</option>
-          <option value="1">TMR</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <input type="file" class="form-control" id="lienSynthese">
-        <p> Les fichiers acceptés sont en jpg, pdf et png</p>
-      </div>
-
-      <input type="submit" class="btn btn-primary form-group" value="Upload"/>
-
-    </form>
-
-  </div>
+  
+  </section>
+      
+    
 
   `;
 
+  main.innerHTML = mainOk; 
 
-  const myForm = document.querySelector('form');
-  const titre = document.querySelector('#titre');
-  const description = document.querySelector('#description');
-  const annee = document.querySelector('#selectAnnee');
-  const section = document.querySelector('#selectSection');
-  const cours = document.querySelector('#selectCours');
-  const lienSynthese = document.querySelector('#lienSynthese');
+const signInButton = document.querySelector('#presentation');
+  const currentAccounts = myMSALObj.getAllAccounts();
+  
+  if(currentAccounts.length===0){
+    signInButton.innerHTML='Me Connecter'
+  }
+  else{
+    signInButton.innerHTML='Me Deconnecter'
+  } 
+  // Ajoutez une variable pour représenter l'état de la connexion
+  let isLoggedIn = currentAccounts.length > 0;
 
-  myForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  // Mettez à jour l'état de la connexion en fonction de la longueur de currentAccounts
+  const updateLoginStatus = () => {
+    isLoggedIn = currentAccounts.length > 0;
+  };
 
-    const syntheseCreated = {
-      titre: titre.value,
-      description: description.value,
-      annee: annee.value,
-      section: section.value,
-      cours: cours.value,
-      lien_synthese: lienSynthese.value,
-      etudiant_mail: "test@gmail.com",
-      likes: Number(0),
-      telechargements: Number(0),
-    };
+  signInButton.addEventListener('click', async () => {
+    try {
+      if (!isLoggedIn) {
+        await signIn();
+        currentAccounts.length = 1;
+        updateLoginStatus(); // Mettez à jour l'état de la connexion
+        Navbar();
+      } else {
+        await signOut();
+        currentAccounts.length = 0;
+        updateLoginStatus(); // Mettez à jour l'état de la connexion
+      }
+    } catch (error) {
+      console.error("Error during sign-in/sign-out:", error);
+    }
+  }); 
 
-    await addSynthese(syntheseCreated);
-    Navigate('/');
+  const app = document.querySelector('#presentation');
+  const typewriter = new Typewriter(app, {
+    loop: false,
+    delay: 75,
   });
+  
+  typewriter
+    .typeString('Salut Toi !')
+    .pauseFor(300)
+    .deleteAll()
+    .typeString('Bienvenu sur <span style="color:#fbc72c;"> Vinci Genius</span>')
+    .pauseFor(300)
+    .deleteAll()
+    .typeString('Connecte toi au plus vite pour profiter des synthèses d\'autre étudiants')
+    .start();
 };
 
 
-
-export default UploadPage;
+export default HomePage;

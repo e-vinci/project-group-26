@@ -1,11 +1,13 @@
-import GamePage from '../Pages/GamePage';
 import HomePage from '../Pages/HomePage';
-import NewPage from '../Pages/NewPage';
+import UploadPage from '../Pages/UploadPage';
+import VinciGeniusPage from '../Pages/VinciGeniusPage';
+import ProfilPage from '../Pages/ProfilPage';
 
 const routes = {
   '/': HomePage,
-  '/game': GamePage,
-  '/new': NewPage,
+  '/profil': ProfilPage,
+  '/upload': UploadPage,
+  '/vincigenius': VinciGeniusPage
 };
 
 export default routes;
