@@ -1,7 +1,11 @@
-/* eslint-disable no-console */
+import Chart from 'chart.js/auto'
+
 import { clearPage } from '../../utils/render';
 import '../../stylesheets/dashboard.css';
 import Navigate from '../Router/Navigate';
+
+
+
 
 
 
@@ -46,9 +50,11 @@ async function TableOfStudent() {
 
     // Append the select container to the main element or another target element
     main.appendChild(selectContainer);
+    selectElement.innerHTML = '';
+
 
     try {
-        const response = await fetch('/api/dashboard');
+        const response = await fetch('/api/users');
         const students = await response.json();
 
         const selectEtudiants = document.getElementById('selectEtudiants');
@@ -119,7 +125,7 @@ function graphForNumberVisit() {
             }]
         }
     });
-
+    
     return barChart;
 }
 

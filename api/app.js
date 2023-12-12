@@ -8,7 +8,7 @@ const corsOptions = {
   origin: ['http://localhost:8080', 'https://e-baron.github.io'],
 };
 
-const dashboardsRouter = require('./routes/dashboard');
+const usersRouter = require('./routes/users');
 const authsRouter = require('./routes/auths');
 const uploadsRouter = require('./routes/uploads');
 
@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 app.use(cors(corsOptions));
 
-app.use('/dashboard', dashboardsRouter);
+app.use('/users', usersRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auths', authsRouter);
