@@ -10,24 +10,31 @@ const readAllSyntheses = async () => {
 };
 
 const addSynthese = async (synthese) => {
-    try {
-      const options = {
-        method: 'POST',
-        body: JSON.stringify(synthese),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-  
-      const response = await fetch('/api/uploads', options);
-  
-      const createdSynthese = await response.json();
-  
-      return createdSynthese;
-    } catch (err) {
-      console.error('addSynthese::error: ', err);
-      throw err;
-    }
-  };
+  try {
+    const formData = new FormData();
+    formData.append('titre', synthese.titre);
+    formData.append('description', synthese.description);
+    formData.append('annee', synthese.annee);
+    formData.append('section', synthese.section);
+    formData.append('cours', synthese.cours);
+    formData.append('lienSynthese', synthese.lien_synthese);
+    formData.append('etudiant_mail', synthese.etudiant_mail);
+    formData.append('etudiant_nom', synthese.etudiant_nom);
+
+    const options = {
+      method: 'POST',
+      body: formData,
+    };
+
+    const response = await fetch('/api/uploads', options);
+
+    const createdSynthese = await response.json();
+
+    return createdSynthese;
+  } catch (err) {
+    console.error('addSynthese::error: ', err);
+    throw err;
+  }
+};
 
 export { readAllSyntheses, addSynthese };

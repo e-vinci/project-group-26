@@ -4,9 +4,6 @@ import { addSynthese } from '../../models/syntheses';
 import Navigate from '../Router/Navigate';
 import { myMSALObj } from '../Azure/AzureConfig';
 
-
-
-
 const UploadPage = () => {
 
   const currentAccounts = myMSALObj.getAllAccounts();
@@ -22,7 +19,7 @@ const UploadPage = () => {
 
   <div id="mainSynthese">
 
-    <form id="formPostSynthese" enctype='multipart/form-data'>
+    <form id="formPostSynthese" enctype="multipart/form-data">
 
       <h1> Publier une synthèse </h1>
 
@@ -53,7 +50,7 @@ const UploadPage = () => {
       </div>
 
       <div class="form-group">
-        <input type="file" class="form-control" id="lienSynthese">
+        <input type="file" class="form-control" id="lienSynthese" name="lienSynthese">
         <p> Les fichiers acceptés sont en jpg, pdf et png</p>
       </div>
 
@@ -84,11 +81,9 @@ const UploadPage = () => {
       annee: annee.value,
       section: section.value,
       cours: cours.value,
-      lien_synthese: lienSynthese.value,
+      lien_synthese: lienSynthese.files[0],
       etudiant_mail: user.username,
-      etudiant_nom: user.name,
-      likes: Number(0),
-      telechargements: Number(0),
+      etudiant_nom: user.name
     };
 
     await addSynthese(syntheseCreated);
