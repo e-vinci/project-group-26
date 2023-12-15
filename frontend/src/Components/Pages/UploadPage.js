@@ -36,16 +36,19 @@ const UploadPage = () => {
         <select class="custom-select mr-sm-2" id="selectAnnee">
           <option selected>Année</option>
           <option value="1">1</option>
+          <option value="1">2</option>
         </select>
 
         <select class="custom-select mr-sm-2" id="selectSection">
           <option selected>Section</option>
           <option value="1">BIN</option>
+          <option value="1">ECO</option>
         </select>
 
         <select class="custom-select mr-sm-2" id="selectCours">
           <option selected>Cours</option>
           <option value="1">TMR</option>
+          <option value="1">Gestion</option>
         </select>
       </div>
 
@@ -78,9 +81,9 @@ const UploadPage = () => {
     const syntheseCreated = {
       titre: titre.value,
       description: description.value,
-      annee: annee.value,
-      section: section.value,
-      cours: cours.value,
+      annee: annee.options[annee.selectedIndex].text,
+      section: section.options[section.selectedIndex].text,
+      cours: cours.options[cours.selectedIndex].text,
       lien_synthese: lienSynthese.files[0],
       etudiant_mail: user.username,
       etudiant_nom: user.name
