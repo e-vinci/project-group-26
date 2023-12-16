@@ -1,3 +1,6 @@
+import { tokenRequest } from "../Components/Azure/AzureConfig";
+import { getTokenRedirect } from "../Components/Azure/Log";
+
 const readAllSyntheses = async () => {
     try {
         const res = await fetch('/api/uploads');
@@ -11,6 +14,11 @@ const readAllSyntheses = async () => {
 
 const addSynthese = async (synthese) => {
   try {
+    const tokenResponse = await getTokenRedirect(tokenRequest);
+    const headers = new Headers();
+    const bearer = `Bearer ${tokenResponse.idToken}`;
+    console.log(bearer);
+    headers.append("Authorization", bearer);
     const formData = new FormData();
     formData.append('titre', synthese.titre);
     formData.append('description', synthese.description);
@@ -20,13 +28,18 @@ const addSynthese = async (synthese) => {
     formData.append('lienSynthese', synthese.lien_synthese);
     formData.append('etudiant_mail', synthese.etudiant_mail);
     formData.append('etudiant_nom', synthese.etudiant_nom);
+      
 
     const options = {
       method: 'POST',
       body: formData,
+      headers
     };
 
     const response = await fetch('/api/uploads', options);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
     const createdSynthese = await response.json();
 

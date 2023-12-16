@@ -63,12 +63,29 @@ function signOut() {
 
     myMSALObj.logoutRedirect(logoutRequest);
 }
+function getTokenRedirect(request) {
+    /**
+     * See here for more info on account retrieval: 
+     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+     */
+    request.account = myMSALObj.getAccountByUsername(username);
+
+    return myMSALObj.acquireTokenSilent(request)
+        .catch(error => {
+            console.warn("silent token acquisition fails. acquiring token using redirect");
+            if (error instanceof myMSALObj.InteractionRequiredAuthError) {
+                // fallback to interaction when silent call fails
+                return myMSALObj.acquireTokenRedirect(request);
+            } 
+            return undefined;
+        });
+}
 
 // La fonction showWelcomeMessage doit être définie avant d'être utilisée
 function showWelcomeMessage(userName) {
+    
   const app = document.querySelector('#presentation');
   const signInButton = document.querySelector('#SignIn');
-
   // Reconfigurez les éléments du DOM
   app.innerHTML = `Bienvenue ${userName}`;
   signInButton.setAttribute("click", signOut);
@@ -76,6 +93,6 @@ function showWelcomeMessage(userName) {
 }
 
 
-export { signIn, signOut }
+export { signIn, signOut,getTokenRedirect }
 
 
