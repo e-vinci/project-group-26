@@ -7,6 +7,7 @@ const {
   readAllSyntheses,
   createSynthese,
 } = require('../models/uploads');
+const { jwtVerificationMiddleware } = require('../utils/auths');
 
 const router = express.Router();
 
@@ -34,7 +35,8 @@ router.get('/', (req, res) => {
 });
 
 // Create a film
-router.post('/', upload.single('lienSynthese'), (req, res) => {
+router.post('/', jwtVerificationMiddleware, upload.single('lienSynthese'), (req, res) => {
+  console.log('je passe la')
   const titre = req?.body?.titre?.trim()?.length !== 0 ? req.body.titre : undefined;
   const description = req?.body?.content?.trim().length !== 0 ? req.body.description : undefined;
   const annee = req?.body?.content?.trim().length !== 0 ? req.body.annee : undefined;
