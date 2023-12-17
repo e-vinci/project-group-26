@@ -2,6 +2,9 @@ const express = require('express');
 const {
   getAllUsers, addOneUser, updateAccessByEmail, getStudentAccessInfo, nbreStudent,
 } = require('../models/users');
+const {
+  addAnnouce, getAllAnnouce,
+} = require('../models/annouce');
 
 const router = express.Router();
 
@@ -74,6 +77,39 @@ router.get('/numberOfStudents', async (req, res) => {
   try {
     const nbre = await nbreStudent();
     return res.json(nbre);
+  } catch (error) {
+    console.error('Error getting users:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/annouce', async (req, res) => {
+  console.log('on est arrivé dans la méthode POST/annouce');
+  try {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ error: 'title and content are required fields' });
+    }
+
+    await addAnnouce(title, content);
+    return res.sendStatus(200);
+  } catch (error) {
+    console.error('Error adding user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/readAnnoucement', async (req, res) => {
+  console.log('on est arrivé dans la méthode GET/readAnnoucement');
+  try {
+    const foundAllAnnouce = await getAllAnnouce();
+
+    if (!foundAllAnnouce) return res.sendStatus(404);
+
+    // Mettez à jour la liste pour inclure la propriété canAccessSite
+    const last = foundAllAnnouce[foundAllAnnouce.length - 1];
+    return res.json(last);
   } catch (error) {
     console.error('Error getting users:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
