@@ -1,14 +1,30 @@
 const express = require('express');
-const multer = require('multer')
-const upload = multer({
-    dest: '/test',
-})
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const destinationDirectory = path.join(__dirname, '../..', 'files');
 const {
   readAllSyntheses,
   createSynthese,
 } = require('../models/uploads');
 
 const router = express.Router();
+
+if (!fs.existsSync(destinationDirectory)) {
+  fs.mkdirSync(destinationDirectory);
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, destinationDirectory);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 
 // Read all the films, filtered by minimum-duration if the query param exists
 router.get('/', (req, res) => {
@@ -24,22 +40,12 @@ router.post('/', upload.single('lienSynthese'), (req, res) => {
   const annee = req?.body?.content?.trim().length !== 0 ? req.body.annee : undefined;
   const section = req?.body?.content?.trim().length !== 0 ? req.body.section : undefined;
   const cours = req?.body?.content?.trim().length !== 0 ? req.body.cours : undefined;
-  const lien_synthese = req?.body?.content?.trim().length !== 0 ? req.body.lien_synthese : undefined;
+  const lien_synthese = req.file.path;
   const etudiant_mail = req?.body?.content?.trim().length !== 0 ? req.body.etudiant_mail : undefined;
   const etudiant_nom = req?.body?.content?.trim().length !== 0 ? req.body.etudiant_nom : undefined;
-  const likes =
-    typeof req?.body?.likes !== 'number' || req.body.likes < 0
-      ? undefined
-      : req.body.likes;
-  const telechargements = typeof req?.body?.telechargements !== 'number' || req.body.telechargements < 0 ? undefined : req.body.telechargements;
+  const likes = 0;
+  const telechargements = 0;
   if (!titre || !description || !annee || !section|| !cours|| !lien_synthese|| !etudiant_mail || !etudiant_nom) return res.sendStatus(400);
-
-  fs.writeFile('./test', req.body.lien_synthese, (err) => {
-    if (err) throw err;
-    console.log('saved!');
-  });
-  console.log('ter!');
-
   const createdSynthese = createSynthese(titre, description, annee, section, cours, lien_synthese, etudiant_mail, etudiant_nom, likes, telechargements);
 
   return res.json(createdSynthese);

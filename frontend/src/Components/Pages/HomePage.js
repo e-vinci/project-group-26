@@ -8,6 +8,7 @@ import '../../stylesheets/home.css';
 
 
 const HomePage = () => {
+  
   const main = document.querySelector('main');
   const mainDisconnected = `
 
@@ -47,6 +48,10 @@ const HomePage = () => {
                 <div class="bulle-info">
                   <p id="presentation"></p>
                 </div>
+              </div>
+
+              <div class="link">
+                <input type="submit" class="btn btn-primary" id="SignIn"></input>
               </div>
 
           </div>
@@ -107,17 +112,16 @@ const HomePage = () => {
   main.innerHTML = mainDisconnected;
 
   const currentAccounts = myMSALObj.getAllAccounts();
-
-
-  const signInButton = document.querySelector('#presentation');
+  const submit = document.querySelector('input');
+  console.log(submit)
   
   if(currentAccounts.length===0){
-    signInButton.innerHTML='Me Connecter'
-
-  }
-  else{
-    signInButton.innerHTML='Me Deconnecter'
+    submit.innerHTML='Me Connecter'
+  } else{
+    submit.innerHTML='Me Deconnecter'
   } 
+
+
   // Ajoutez une variable pour représenter l'état de la connexion
   let isLoggedIn = currentAccounts.length > 0;
 
@@ -126,7 +130,7 @@ const HomePage = () => {
     isLoggedIn = currentAccounts.length > 0;
   };
 
-  signInButton.addEventListener('click', async () => {
+  submit.addEventListener('click', async () => {
     try {
       if (!isLoggedIn) {
         await signIn();

@@ -9,9 +9,9 @@ const corsOptions = {
 };
 
 const usersRouter = require('./routes/users');
-const pizzaRouter = require('./routes/pizzas');
 const authsRouter = require('./routes/auths');
 const uploadsRouter = require('./routes/uploads');
+const {jwtVerificationMiddleware} =require('./utils/auths')
 
 const app = express();
 
@@ -25,8 +25,7 @@ app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
-app.use('/pizzas', pizzaRouter);
 app.use('/auths', authsRouter);
-app.use('/uploads', uploadsRouter);
+app.use('/uploads',jwtVerificationMiddleware, uploadsRouter);
 
 module.exports = app;

@@ -1,3 +1,6 @@
+import { tokenRequest } from "../Components/Azure/AzureConfig";
+import { getTokenRedirect } from "../Components/Azure/Log";
+
 const readAllSyntheses = async () => {
     try {
         const res = await fetch('/api/uploads');
@@ -11,15 +14,22 @@ const readAllSyntheses = async () => {
 
 const addSynthese = async (synthese) => {
     try {
+      const tokenResponse = await getTokenRedirect(tokenRequest);
+      
       const options = {
         method: 'POST',
         body: JSON.stringify(synthese),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tokenResponse.idToken}`
         },
       };
   
       const response = await fetch('/api/uploads', options);
+
+      if(!response.ok){
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
   
       const createdSynthese = await response.json();
   

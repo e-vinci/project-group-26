@@ -1,8 +1,12 @@
 
 #navbarWrapper {
     background-color: white;
-
 }
+
+#navbarWrapper:not([data-loggedin]) {
+  visibility: hidden;
+}
+
 .navbar {
     background-color: var(--color-bg-navbar);
     padding: 5px;

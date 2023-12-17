@@ -34,7 +34,7 @@ const Navbar = () => {
     <div class="collapse navbar-collapse flex-column flex-sm-row" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" data-uri="/"><i class="bi bi-house"></i>Accueil</a>
+          <a class="nav-link" data-uri="/vincigenius"><i class="bi bi-house"></i>Accueil</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" data-uri="/upload"><i class="bi bi-upload"></i>Upload</a>
@@ -79,12 +79,20 @@ const Navbar = () => {
   const userAccounts = myMSALObj.getAllAccounts();
 
   if (userAccounts.length <= 0) {
-    signInButton.innerHTML='Me Connecter';
+      if (navbarWrapper) {
+        navbarWrapper.style.visibility ='hidden';
+        navbarWrapper.removeAttribute('data-loggedin');
+      }
+      signInButton.innerHTML='Me Connecter';
       signInButton.addEventListener('click', () => {
       signIn();
     }) 
   } else {
-    signInButton.innerHTML='Me Deconnecter';
+    if (navbarWrapper) {
+      navbarWrapper.style.visibility = 'visible';
+      navbarWrapper.setAttribute('data-loggedin', true);
+    }
+      signInButton.innerHTML='Me Deconnecter';
       signInButton.addEventListener('click', () => {
       signOut();
     }) 

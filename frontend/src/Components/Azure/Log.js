@@ -2,13 +2,12 @@ import { msalConfig, loginRequest, myMSALObj } from './AzureConfig';
 import Navigate from '../Router/Navigate';
 
 let username = "";
+/* Link:https://github.com/Azure-Samples/ms-identity-javascript-v2
+ */
 
 function selectAccount () {
 
-    /**
-     * See here for more info on account retrieval: 
-     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
-     */
+   
 
     const currentAccounts = myMSALObj.getAllAccounts();
       if (currentAccounts.length > 1) {
@@ -20,6 +19,10 @@ function selectAccount () {
     }
   }
 
+/* Link:https://github.com/Azure-Samples/ms-identity-javascript-v2
+*
+*/
+
 function handleResponse(response) {
     if (response !== null) {
         username = response.account.username;
@@ -28,11 +31,9 @@ function handleResponse(response) {
         selectAccount();
     }
 }
-/**
- * A promise handler needs to be registered for handling the
- * response returned from redirect flow. For more information, visit:
- * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md
+/* Link:https://github.com/Azure-Samples/ms-identity-javascript-v2
  */
+
 myMSALObj.handleRedirectPromise()
     .then(handleResponse)
     .catch((error) => {
@@ -40,10 +41,6 @@ myMSALObj.handleRedirectPromise()
     });
 async function signIn() {
 
-    /**
-     * You can pass a custom request object below. This will override the initial configuration. For more information, visit:
-     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#request
-     */
 
     await myMSALObj.loginRedirect(loginRequest);
     Navigate('/vincigenius')
@@ -51,10 +48,6 @@ async function signIn() {
 
 function signOut() {
 
-    /**
-     * You can pass a custom request object below. This will override the initial configuration. For more information, visit:
-     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#request
-     */
 
     const logoutRequest = {
         account: myMSALObj.getAccountByUsername(username),
@@ -62,6 +55,19 @@ function signOut() {
     };
 
     myMSALObj.logoutRedirect(logoutRequest);
+}
+
+function getTokenRedirect(request) {
+
+    request.account = myMSALObj.getAccountByUsername(username);
+
+    return myMSALObj.acquireTokenSilent(request)
+        .catch(error => {
+            if (error instanceof myMSALObj.InteractionRequiredAuthError) {
+                return myMSALObj.acquireTokenRedirect(request);
+            }
+            return undefined
+        });
 }
 
 // La fonction showWelcomeMessage doit être définie avant d'être utilisée
@@ -76,6 +82,6 @@ function showWelcomeMessage(userName) {
 }
 
 
-export { signIn, signOut }
+export { signIn, signOut,getTokenRedirect}
 
 

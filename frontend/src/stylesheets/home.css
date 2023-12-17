@@ -70,7 +70,7 @@
 
   .home-container {
     background-image: url('../img/bg.png');
-    background-size: 70%;
+    background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
     width: 100%;
@@ -134,7 +134,9 @@
   
   .home-container .home-txt .link .btn {
     width: 300px;
+    border: none;
     border-radius: 20px;
+    margin-bottom: 20%;
   }
 
 

@@ -1,34 +1,25 @@
-const jwt = require('jsonwebtoken');
-const { readOneUserFromUsername } = require('../models/users');
+// eslint-disable-next-line import/no-unresolved
+const verifyAzureToken=require('azure-ad-jwt-lite')
 
-const jwtSecret = 'ilovemypizza!';
 
-const authorize = (req, res, next) => {
-  const token = req.get('authorization');
-  if (!token) return res.sendStatus(401);
+const jwtVerificationMiddleware = async (req, res, next) => {
+  let token = req.headers.authorization;
+  // npm stoken = token.replace('Bearer ', '');
+  console.log(token);
+  if (!token) {
+    return res.status(401).json({ error: 'Token non fourni' });
+  }
 
   try {
-    const decoded = jwt.verify(token, jwtSecret);
-    console.log('decoded', decoded);
-    const { username } = decoded;
-
-    const existingUser = readOneUserFromUsername(username);
-
-    if (!existingUser) return res.sendStatus(401);
-
-    req.user = existingUser; // request.user object is available in all other middleware functions
-    return next();
-  } catch (err) {
-    console.error('authorize: ', err);
-    return res.sendStatus(401);
+    const decoded = await  verifyAzureToken.verifyAzureToken(token);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(401).json({ error: 'Token invalide' });
   }
 };
 
-const isAdmin = (req, res, next) => {
-  const { username } = req.user;
+// Middleware de vérification du jeton appliqué à toutes les routes suivantes
 
-  if (username !== 'admin') return res.sendStatus(403);
-  return next();
-};
-
-module.exports = { authorize, isAdmin };
+module.exports = { jwtVerificationMiddleware };

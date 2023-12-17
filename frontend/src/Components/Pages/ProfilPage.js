@@ -3,11 +3,12 @@ import image from '../../img/4882404-removebg-preview.png'
 import '../../stylesheets/card.css';
 import '../../stylesheets/profil.css';
 import { myMSALObj } from '../Azure/AzureConfig';
+import isLogIn from '../Azure/IsLogIn';
 
 
 const ProfilPage = async () => {
     clearPage();
-
+    isLogIn();
     const profilPage = document.querySelector('main');
     profilPage.innerHTML = `
 
@@ -25,10 +26,10 @@ const ProfilPage = async () => {
               <h6 id="name"></h6>
             </div>
 
-            <div class="link-profil d-flex justify-content-center align-items-center w-50">
+            <!-- <div class="link-profil d-flex justify-content-center align-items-center w-50">
               <a class="nav-link" href="#" alt="RENVOIE DANS UN CHAT AVEC"><i class='bi bi-chat'></i>Discuter</a>
               <a class="nav-link sub" href="#" alt="S'ABBONER"><i class='bi bi-'></i>S'abonner</a>
-            </div>
+            </div> -->  
 
         </div>
       </section>
