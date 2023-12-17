@@ -1,8 +1,10 @@
 const path = require('node:path');
 const { parse, serialize } = require('../utils/json');
+const { use } = require('../routes/users');
 
 const jsonDbPath = path.join(__dirname, '../data/users.json');
 
+// ------------------------------------Obtenir tous les utilisateurs
 async function getAllUsers() {
   try {
     const data = parse(jsonDbPath, 'utf-8');
@@ -14,17 +16,33 @@ async function getAllUsers() {
   }
 }
 
-async function addOneUser(name, username) {
+// ------------------------------------Ajouter un utilisateur
+async function addOneUser(name, email) {
   try {
     const users = await getAllUsers();
 
+    // Vérifiez si l'utilisateur existe déjà
+    const existingUser = users.find((user) => user.email === email);
+    console.log('name', name);
+    console.log('email', email);
+    console.log('existingUser', existingUser);
+
+    if (existingUser) {
+      console.log('L\'utilisateur existe déjà');
+      return;
+    }
+
     const newUser = {
       name,
-      username,
+      email,
+      canAccessSite: true,
     };
+
+    console.log('Before push:', users);
 
     // Ajoutez le nouvel utilisateur à la liste
     users.push(newUser);
+    console.log('After push:', users);
 
     // Écrivez la liste mise à jour dans le fichier JSON
     serialize(jsonDbPath, users);
@@ -36,21 +54,53 @@ async function addOneUser(name, username) {
   }
 }
 
-async function userExists(email) {
+// ------------------------------------Mettre à jour l'accès d'un utilisateur par email
+async function updateAccessByEmail(email) {
   try {
-    const data = await getAllUsers();
-    const existingUser = data.find((user) => user.email === email);
-    return !!existingUser;
+    const users = await getAllUsers();
+
+    const updatedUsers = users.map((user) => {
+      if (user.email === email) {
+        return { ...user, canAccessSite: false };
+      }
+      return user;
+    });
+
+    // Enregistrez les mises à jour dans le fichier JSON
+    serialize(jsonDbPath, updatedUsers); // Ajustez le chemin en conséquence
+
+    return updatedUsers;
   } catch (error) {
-    console.error('Error checking user existence:', error);
-    throw error;
+    console.error('Error updating access:', error);
+    throw new Error('Internal Server Error');
   }
 }
 
-// Ajoutez d'autres fonctions de modèle au besoin
+// ------------------------------------Vérifier l'accès de l'étudiant
+async function getStudentAccessInfo(email) {
+  try {
+    const users = await getAllUsers();
+    const user = users.find((usere) => usere.email === email);
+    console.log('user', user.canAccessSite);
+
+    return user.canAccessSite;
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'accès de l\'étudiant', error);
+    return false;
+  }
+}
+
+// ------------------------------------Obtenir le nombre d'étudiants
+async function nbreStudent() {
+  const jsonData = parse(jsonDbPath, 'utf-8'); // Replace with the correct path to your JSON file
+  const numberOfStudents = jsonData.length - 1;
+  return numberOfStudents;
+}
 
 module.exports = {
   getAllUsers,
   addOneUser,
-  userExists,
+  updateAccessByEmail,
+  nbreStudent,
+  getStudentAccessInfo,
 };

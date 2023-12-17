@@ -1,62 +1,83 @@
 const express = require('express');
-const { getAllUsers, addOneUser, userExists } = require('../models/users');
+const {
+  getAllUsers, addOneUser, updateAccessByEmail, getStudentAccessInfo, nbreStudent,
+} = require('../models/users');
 
 const router = express.Router();
 
-// Read a film from its id in the menu
+// Get all users
 router.get('/', async (req, res) => {
+  console.log('on est arrivé dans la méthode GET/');
   try {
-    const foundUser = await getAllUsers();
+    const foundUsers = await getAllUsers();
 
-    if (!foundUser) return res.sendStatus(404);
+    if (!foundUsers) return res.sendStatus(404);
 
-    return res.json(foundUser);
+    // Mettez à jour la liste pour inclure la propriété canAccessSite
+    const updatedUsers = foundUsers.map((user) => ({ ...user, canAccessSite: true }));
+
+    return res.json(updatedUsers);
   } catch (error) {
     console.error('Error getting users:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// Check if a user with the given email already exists
-router.post('/exists', async (req, res) => {
+// Mettre à jour canAccessSite côté serveur
+router.put('/updateAccess/:email', async (req, res) => {
+  console.log('on est arrivé dans la méthode /updateAccess/:email');
   try {
-    const { email } = req.body;
+    const userEmail = req.params.email;
 
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
-    }
+    // Appeler la méthode de mise à jour de l'accès
+    const updatedUsers = await updateAccessByEmail(userEmail);
 
-    const exists = await userExists(email);
-    return res.json({ exists });
+    // Utilisez la variable mise à jour dans la réponse JSON
+    return res.json(updatedUsers);
   } catch (error) {
-    console.error('Error checking user existence:', error);
+    console.error('Error updating access:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// Add a user to data/users.json
+// Add a user
 router.post('/', async (req, res) => {
+  console.log('on est arrivé dans la méthode POST/');
   try {
-    // Assurez-vous que le corps de la requête contient les données nécessaires
     const { name, email } = req.body;
 
     if (!name || !email) {
       return res.status(400).json({ error: 'Name and email are required fields' });
     }
 
-    // Vérifiez d'abord si l'utilisateur existe déjà
-    const exists = await userExists(email);
-
-    if (!exists) {
-      // L'utilisateur n'existe pas encore, ajoutez-le
-      await addOneUser(name, email);
-
-      return res.status(201).json({ message: 'User added successfully' });
-    }
-
-    return res.status(409).json({ error: 'User already exists' });
+    await addOneUser(name, email);
+    return res.sendStatus(200);
   } catch (error) {
     console.error('Error adding user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/pageRequiringAccess', async (req, res) => {
+  console.log('on est arrivé dans la méthode GET/pageRequiringAccess');
+
+  try {
+    const valeur = await getStudentAccessInfo(req.query.email);
+    console.log('email', req.query.email);
+    console.log('valeur', valeur);
+    return res.json(valeur);
+  } catch (error) {
+    console.error('Error getting acces:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/numberOfStudents', async (req, res) => {
+  try {
+    const nbre = await nbreStudent();
+    return res.json(nbre);
+  } catch (error) {
+    console.error('Error getting users:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
