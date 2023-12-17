@@ -13,8 +13,6 @@ async function addUser(user) {
         // Autres options de configuration si nécessaire
     });
     
-    console.log('Response from server:', addUserResponse);
-
 
     if (!addUserResponse.ok) {
         throw new Error(`Failed to add user: ${addUserResponse.status}`);
@@ -37,7 +35,6 @@ async function getStudentAccessInfo (email){
         if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 
         const canAccessSite = await response.json();
-        console.log('canAccessSite', canAccessSite);
         return canAccessSite;
 
     } catch (err) {
@@ -58,7 +55,6 @@ async function modificationOfStudentAccessInfo(email) {
             body: JSON.stringify({ email }),
         });
 
-        console.log('Response from server:', addUserResponse);
 
         if (!addUserResponse.ok) {
             throw new Error(`Failed to update access: ${addUserResponse.status}`);
