@@ -1,8 +1,8 @@
-import Chart from 'chart.js/auto'
-
 import { clearPage } from '../../utils/render';
 import '../../stylesheets/dashboard.css';
 import { modificationOfStudentAccessInfo, fetchNumberOfStudents }  from '../../models/users'
+import { fetchAnnouce, readLastAnnouce}   from '../../models/annouce'
+
 
 
 
@@ -18,9 +18,8 @@ const DashboardPage = () => {
     clearPage();
     TableOfStudent();
     viewNumberOfStudent();
-    annoucementForm();
-    graphForNumberVisit();   
-    
+    annoucementForm();    
+    displayPopup()
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -123,44 +122,6 @@ async function TableOfStudent() {
 
 
 
-//-----------------------------------------------------------------------------------
-function graphForNumberVisit() {
-    // Create container for the chart
-    const chartContainer = document.createElement('div');
-    chartContainer.className = 'chart-container';
-
-    // Create canvas element for the chart
-    const canvasElement = document.createElement('canvas');
-    canvasElement.id = 'barCanvas';
-    canvasElement.setAttribute('aria-label', 'chart');
-    canvasElement.setAttribute('role', 'img');
-
-    // Append canvas element to the chart container
-    chartContainer.appendChild(canvasElement);
-
-    // Append the chart container to the main element or another target element
-    main.appendChild(chartContainer);
-
-    // Get the canvas element by ID
-    const barCanvas = document.getElementById("barCanvas");
-
-    // Create a new radar chart
-    const barChart = new Chart(barCanvas, {
-        type: "radar",
-        data: {
-            labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-            datasets: [{
-                label: "Nombre d'étudiants au cours du mois",
-                data: [100, 150, 200, 180, 250, 300, 280, 200, 220, 300, 350, 400],
-                backgroundColor: [
-                    "lightblue"
-                ]
-            }]
-        }
-    });
-    
-    return barChart;
-}
 
 
 
@@ -254,20 +215,14 @@ function annoucementForm() {
     event.preventDefault();
     const title = document.getElementById('announcementTitle').value;
     const content = document.getElementById('announcementContent').value;
-
     console.log(title, content);
-    displayPopup(title, content);
-
-    // Reset form values
+    fetchAnnouce(title, content)
     form.reset();
+
 });
 }
-function displayPopup(title, content) {
-    const announcementShown = localStorage.getItem('announcementShown');
-
-    // Vérifier si l'annonce a déjà été affichée
-    if (!announcementShown) {
-        // Créer popup container
+async function displayPopup() {
+    const ann = await readLastAnnouce();
         const popup = document.createElement('div');
         popup.className = 'popup';
 
@@ -277,11 +232,11 @@ function displayPopup(title, content) {
 
         // Créer heading element
         const heading = document.createElement('h2');
-        heading.textContent = title;
+        heading.textContent = ann.title;
 
         // Créer paragraph element
         const paragraph = document.createElement('p');
-        paragraph.textContent = content;
+        paragraph.textContent = ann.content;
 
         // Créer close button
         const closeButton = document.createElement('button');
@@ -306,7 +261,7 @@ function displayPopup(title, content) {
             // Stocker l'état de l'annonce dans le stockage local
             localStorage.setItem('announcementShown', 'true');
         });
-    }
+    
 }
 
 
