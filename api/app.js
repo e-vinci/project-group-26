@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
@@ -8,8 +9,9 @@ const corsOptions = {
 };
 
 const usersRouter = require('./routes/users');
-const pizzaRouter = require('./routes/pizzas');
 const authsRouter = require('./routes/auths');
+const uploadsRouter = require('./routes/uploads');
+
 
 const app = express();
 
@@ -20,8 +22,10 @@ app.use(cookieParser());
 
 app.use(cors(corsOptions));
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/users', usersRouter);
-app.use('/pizzas', pizzaRouter);
 app.use('/auths', authsRouter);
+app.use('/uploads', uploadsRouter);
 
 module.exports = app;

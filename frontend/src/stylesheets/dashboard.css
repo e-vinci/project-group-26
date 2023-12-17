@@ -1,0 +1,73 @@
+main {
+  flex-direction: column;
+}
+
+
+#selectEtudiants{
+  width: max-content;
+  border: 1px solid var(--color-prems);
+  border-radius: 20px;
+}
+
+.bottom-left-form {
+  margin-top: 10px;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+.bottom-left-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.popup {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to the top of the container */
+  z-index: 1000;
+  overflow: auto; /* Allow scrolling if the content overflows the screen */
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.bulle-info {
+  width: 300px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;  
+  background-color: white;
+  border: 1px solid #ffe185;
+  box-shadow: 1px 1px 2px var(--color-bg);
+  margin: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: .15s all ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  };
+}
