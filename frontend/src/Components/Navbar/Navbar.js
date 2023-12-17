@@ -35,6 +35,7 @@ const Navbar = () => {
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" data-uri="/new">New Page</a>
+                
               </li>                        
             </ul>
           </div>
