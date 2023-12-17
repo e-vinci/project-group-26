@@ -1,3 +1,4 @@
+import { addUser, getStudentAccessInfo }  from '../../models/users';
 import { msalConfig, loginRequest, myMSALObj } from './AzureConfig';
 import Navigate from '../Router/Navigate';
 
@@ -20,14 +21,28 @@ function selectAccount () {
     }
   }
 
-function handleResponse(response) {
+  async function handleResponse(response) {
     if (response !== null) {
         username = response.account.username;
-        showWelcomeMessage(username);
+        const canAccessSite = await getStudentAccessInfo(username);
+        console.log(canAccessSite)        
+        addUser(response.account);
+        addUser(response.account);
+
+        if (canAccessSite === true) {
+            console.log('L\'étudiant a accès au site.');
+            showWelcomeMessage(username);
+        } else {
+            console.log('L\'étudiant n\'a pas accès au site.');
+            Navigate('/notallowed');
+            console.log('L\'étudiant n\'a pas accès au site.');
+        }
     } else {
         selectAccount();
     }
 }
+
+
 /**
  * A promise handler needs to be registered for handling the
  * response returned from redirect flow. For more information, visit:

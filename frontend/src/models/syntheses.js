@@ -44,6 +44,7 @@ const addSynthese = async (synthese) => {
     const options = {
       method: 'POST',
       body: formData,
+      headers
     };
 
     const response = await fetch('/api/uploads', options);
