@@ -1,13 +1,21 @@
 import { clearPage } from '../../utils/render';
 import imageSynthese from '../../img/4882404-removebg-preview.png';
-import { readAllSyntheses} from '../../models/syntheses';
-// import Navigate from '../Router/Navigate';
+import { readAllSyntheses, downloadSynthese } from '../../models/syntheses';
+import Navigate from '../Router/Navigate';
+import { myMSALObj } from '../Azure/AzureConfig';
 
 
 import '../../stylesheets/card.css';
 
 const VinciGeniusPage = async (synthesesTbl) => {
   clearPage();
+
+  const currentAccounts = myMSALObj.getAllAccounts();
+  if(currentAccounts.length===0){
+    Navigate('/');
+    return;
+  }
+
   const vinciGenius = document.querySelector('main');
 
   const Allsyntheses = await readAllSyntheses();
@@ -86,13 +94,13 @@ const VinciGeniusPage = async (synthesesTbl) => {
                             </a>
                             <div class="card-body">   
 
-                                    <h5 class="card-title"><a href="/" alt="LIEN POUR SYNTHESE" >${element.titre}</a></h5>
-                                    <p class="card-text"><a href="/" alt="LIEN VERS UTILISATEUR">Publié par : ${element.etudiant_nom}</a></p>
+                                    <h5 class="card-title"><a href="/" alt="titre synthese" >${element.titre}</a></h5>
+                                    <p class="card-text"><a href="/" alt="nom utilisateur">Publié par : ${element.etudiant_nom}</a></p>
 
                                 <div class="card-body-link d-flex justify-content-between align-items-center">
                                     <a href="#" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                     <div>
-                                        <a href="#" class="btn btn-primary"><i class="bi bi-download"></i></a>
+                                        <a href="#" class="btn btn-primary"><i class="bi bi-download" id="${element.synthese_id}"></i></a>
                                         <a href="#" class="btn btn-primary"><i class="bi bi-star"></i></a>
                                     </div>
                                 </div>
@@ -116,6 +124,8 @@ const VinciGeniusPage = async (synthesesTbl) => {
     const filterSelectSection = document.querySelector('#filterSyntheseSection');
     const filterSelectCours = document.querySelector('#filterSyntheseCours');
     let filteredSynthese = [];
+
+    const downloadButtons = document.querySelectorAll('a.btn-primary > i.bi-download');
 
     filterForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -144,6 +154,17 @@ const VinciGeniusPage = async (synthesesTbl) => {
         
         filteredSynthese = [];
         
+      });
+
+      downloadButtons.forEach((button) => {
+        button.addEventListener('click', async (event) => {
+          event.preventDefault();
+          console.log("11111111111111111111111111111111111111111111111111");
+      
+          // Utilisez l'ID de chaque bouton de téléchargement spécifique
+          await downloadSynthese(button.id, currentAccounts[0].username);
+          Navigate('/');
+        });
       });
 
 

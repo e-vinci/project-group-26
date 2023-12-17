@@ -63,6 +63,7 @@ function signOut() {
 
     myMSALObj.logoutRedirect(logoutRequest);
 }
+
 function getTokenRedirect(request) {
     /**
      * See here for more info on account retrieval: 
@@ -93,6 +94,6 @@ function showWelcomeMessage(userName) {
 }
 
 
-export { signIn, signOut,getTokenRedirect }
+export { signIn, signOut, getTokenRedirect }
 
 

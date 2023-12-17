@@ -54,7 +54,7 @@ const UploadPage = () => {
 
       <div class="form-group">
         <input type="file" class="form-control" id="lienSynthese" name="lienSynthese">
-        <p> Les fichiers acceptés sont en jpg, pdf et png</p>
+        <p> Veuillez entrer un fichier .pdf</p>
       </div>
 
       <input type="submit" class="btn btn-primary form-group" value="Upload"/>

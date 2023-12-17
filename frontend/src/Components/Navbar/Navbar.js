@@ -34,16 +34,13 @@ const Navbar = () => {
     <div class="collapse navbar-collapse flex-column flex-sm-row" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" data-uri="/"><i class="bi bi-house"></i>Accueil</a>
+          <a class="nav-link" data-uri="/vincigenius"><i class="bi bi-house"></i>Accueil</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" data-uri="/upload"><i class="bi bi-upload"></i>Upload</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-uri="/"><i class="bi bi-bookmark"></i>Bibliothèque</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-uri="/"><i class="bi bi-chat"></i>Chat</a>
+          <a class="nav-link" data-uri="/bibliotheque"><i class="bi bi-bookmark"></i>Bibliothèque</a>
         </li>
 
         <!-- Ajout d'une nouvelle nav-item "Mon Profil" visible sur des écrans de taille inférieure à 1000px -->

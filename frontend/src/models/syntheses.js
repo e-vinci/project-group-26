@@ -2,23 +2,35 @@ import { tokenRequest } from "../Components/Azure/AzureConfig";
 import { getTokenRedirect } from "../Components/Azure/Log";
 
 const readAllSyntheses = async () => {
-    try {
-        const res = await fetch('/api/uploads');
-        const syntheses = await res.json();
-        return syntheses;
-    } catch (err) {
-        console.error('readAllSyntheses::error: ', err);
-        throw err;
-    }
+  try {
+      const res = await fetch('/api/uploads');
+      const syntheses = await res.json();
+      return syntheses;
+  } catch (err) {
+      console.error('readAllSyntheses::error: ', err);
+      throw err;
+  }
+};
+
+const readAllDownloads = async () => {
+  try {
+      const res = await fetch('/api/downloads');
+      const downloads = await res.json();
+      return downloads;
+  } catch (err) {
+      console.error('readAllDownloads::error: ', err);
+      throw err;
+  }
 };
 
 const addSynthese = async (synthese) => {
   try {
+
     const tokenResponse = await getTokenRedirect(tokenRequest);
     const headers = new Headers();
     const bearer = `Bearer ${tokenResponse.idToken}`;
-    console.log(bearer);
     headers.append("Authorization", bearer);
+
     const formData = new FormData();
     formData.append('titre', synthese.titre);
     formData.append('description', synthese.description);
@@ -28,18 +40,13 @@ const addSynthese = async (synthese) => {
     formData.append('lienSynthese', synthese.lien_synthese);
     formData.append('etudiant_mail', synthese.etudiant_mail);
     formData.append('etudiant_nom', synthese.etudiant_nom);
-      
 
     const options = {
       method: 'POST',
       body: formData,
-      headers
     };
 
     const response = await fetch('/api/uploads', options);
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
 
     const createdSynthese = await response.json();
 
@@ -50,4 +57,17 @@ const addSynthese = async (synthese) => {
   }
 };
 
-export { readAllSyntheses, addSynthese };
+const downloadSynthese = async (syntheseID, mail) => {
+  try {
+
+    // await fetch(`/api/uploads/download${syntheseID}?mail=${mail}`, options);
+    window.open(`/api/uploads/download${syntheseID}?mail=${mail}`, '_blank');
+
+  } catch (err) {
+    console.error('downloadSynthese::error: ', err);
+    throw err;
+  }
+};
+
+
+export { readAllSyntheses, addSynthese, downloadSynthese, readAllDownloads };
