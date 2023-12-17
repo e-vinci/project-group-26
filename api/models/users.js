@@ -1,6 +1,5 @@
 const path = require('node:path');
 const { parse, serialize } = require('../utils/json');
-const { use } = require('../routes/users');
 
 const jsonDbPath = path.join(__dirname, '../data/users.json');
 
@@ -8,7 +7,6 @@ const jsonDbPath = path.join(__dirname, '../data/users.json');
 async function getAllUsers() {
   try {
     const data = parse(jsonDbPath, 'utf-8');
-    console.log('Utilisateurs récupérés avec succès', data);
     return data;
   } catch (error) {
     console.error('Erreur lors de la récupération des utilisateurs', error);
@@ -23,9 +21,6 @@ async function addOneUser(name, email) {
 
     // Vérifiez si l'utilisateur existe déjà
     const existingUser = users.find((user) => user.email === email);
-    console.log('name', name);
-    console.log('email', email);
-    console.log('existingUser', existingUser);
 
     if (existingUser) {
       console.log('L\'utilisateur existe déjà');
@@ -38,11 +33,8 @@ async function addOneUser(name, email) {
       canAccessSite: true,
     };
 
-    console.log('Before push:', users);
-
     // Ajoutez le nouvel utilisateur à la liste
     users.push(newUser);
-    console.log('After push:', users);
 
     // Écrivez la liste mise à jour dans le fichier JSON
     serialize(jsonDbPath, users);
@@ -81,7 +73,6 @@ async function getStudentAccessInfo(email) {
   try {
     const users = await getAllUsers();
     const user = users.find((usere) => usere.email === email);
-    console.log('user', user.canAccessSite);
 
     return user.canAccessSite;
   } catch (error) {

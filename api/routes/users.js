@@ -63,8 +63,6 @@ router.get('/pageRequiringAccess', async (req, res) => {
 
   try {
     const valeur = await getStudentAccessInfo(req.query.email);
-    console.log('email', req.query.email);
-    console.log('valeur', valeur);
     return res.json(valeur);
   } catch (error) {
     console.error('Error getting acces:', error);

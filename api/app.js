@@ -11,7 +11,6 @@ const corsOptions = {
 const usersRouter = require('./routes/users');
 const authsRouter = require('./routes/auths');
 const uploadsRouter = require('./routes/uploads');
-const statsRouter = require('./routes/stats');
 
 const app = express();
 
@@ -27,6 +26,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auths', authsRouter);
 app.use('/uploads', uploadsRouter);
-app.use('/stats', statsRouter);
 
 module.exports = app;
