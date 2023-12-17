@@ -142,17 +142,30 @@ const ProfilPage = async () => {
     // Mettez à jour le contenu de l'élément #name en fonction des informations de connexion
     const userAccounts = myMSALObj.getAllAccounts();
 
-  if (userAccounts.length > 0) {
-    const user = userAccounts[0];
-    const nameElement = document.querySelector('#name');
-
-    // Assurez-vous que l'élément #name existe avant de mettre à jour son contenu
-    if (nameElement) {
-      nameElement.innerHTML = user.name;
-      
-      console.log(nameElement);
+    if (userAccounts.length > 0) {
+        const loggedInAccount = userAccounts[0]; // Suppose que vous avez un seul compte
+    
+        try {
+            // Effectuez une requête vers le backend pour obtenir les détails de l'utilisateur
+            const userDetailsResponse = await fetch(`/api/users/profil?email=${loggedInAccount.username}`);
+            const userDetails = await userDetailsResponse.json();
+    
+            if (userDetailsResponse.ok) {
+                const nameElement = document.querySelector('#name');
+    
+                // Assurez-vous que l'élément #name existe avant de mettre à jour son contenu
+                if (nameElement) {
+                    nameElement.innerHTML = userDetails.name;
+                    console.log(nameElement);
+                }
+            } else {
+                console.error('Erreur lors de la récupération des détails de l\'utilisateur');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête pour les détails de l\'utilisateur', error);
+        }
     }
-  }
+    
 }
 
 

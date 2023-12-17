@@ -1,8 +1,22 @@
 import { clearPage } from '../../utils/render';
 import '../../stylesheets/upload.css';
+import { myMSALObj } from '../Azure/AzureConfig';
+import Navigate from '../Router/Navigate';
+
 
 
 const UploadPage = () => {
+  console.log('ZEBIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIBI');
+  const currentAccounts = myMSALObj.getAccount();
+  console.log('rgthjszrthzrthjzrthzrthrthrt', currentAccounts.canAccessSite); 
+  console.log('currentAccount', currentAccounts);
+  if (!currentAccounts.canAccessSite) {
+    console.log('L\'utilisateur n\'est pas connecté.');
+    Navigate('/');
+  } else {
+    console.log('L\'utilisateur est connecté.');
+  }
+
   clearPage();
   const uploadPage = document.querySelector('main');
   uploadPage.innerHTML = `

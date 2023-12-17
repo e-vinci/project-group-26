@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import Typewriter from 'typewriter-effect/dist/core';
 import '../../stylesheets/home.css';
+import annoucementForm from './DashboardPage'
 
 const HomePage = () => {
   const main = document.querySelector('main');
@@ -76,5 +77,6 @@ const HomePage = () => {
     .typeString('Connecte toi au plus vite pour profiter des synthèses d\'autre étudiants')
     .start();
 };
+annoucementForm();
 
 export default HomePage;

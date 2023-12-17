@@ -2,7 +2,8 @@ import Chart from 'chart.js/auto'
 
 import { clearPage } from '../../utils/render';
 import '../../stylesheets/dashboard.css';
-import Navigate from '../Router/Navigate';
+import { modificationOfStudentAccessInfo, fetchNumberOfStudents }  from '../../models/users'
+
 
 
 
@@ -16,54 +17,60 @@ const main = document.querySelector('main');
 const DashboardPage = () => {
     clearPage();
     TableOfStudent();
-    numberOfStudent();
+    viewNumberOfStudent();
     annoucementForm();
     graphForNumberVisit();   
     
 };
 
-
+document.addEventListener('DOMContentLoaded', () => {
+    TableOfStudent();
+});
 
 // Fonction pour afficher les informations de l'étudiant sélectionné
 async function TableOfStudent() {
-    // Create container for the select element
+    // Create the container for the select element
     const selectContainer = document.createElement('div');
     selectContainer.className = 'select-container';
 
-    // Create select element
+    // Create the select element
     const selectElement = document.createElement('select');
     selectElement.className = 'form-select';
     selectElement.id = 'selectEtudiants';
-    selectElement.setAttribute('aria-label', 'Sélectionnez un étudiant');
+    selectElement.setAttribute('value', 'Sélectionnez un étudiant');
 
-    // Create default option
+    // Create the default option
     const defaultOption = document.createElement('option');
-    defaultOption.selected = true;
-    defaultOption.disabled = true;
+    defaultOption.value = ''; // Ajoutez une valeur vide
     defaultOption.text = 'Choisissez un étudiant';
 
-    // Append default option to the select element
+    // Add the default option to the select element
     selectElement.appendChild(defaultOption);
 
-    // Append select element to the select container
+    // Add the select element to the container
     selectContainer.appendChild(selectElement);
 
-    // Append the select container to the main element or another target element
+    // Add the container to the main element or another target element
     main.appendChild(selectContainer);
     selectElement.innerHTML = '';
 
-
     try {
+        // Fetch the list of users from the API
         const response = await fetch('/api/users');
         const students = await response.json();
 
+        // Get the select element by ID
         const selectEtudiants = document.getElementById('selectEtudiants');
 
         if (students.length > 0) {
+            // Vider le contenu existant du menu déroulant
+            selectEtudiants.innerHTML = '';
+        
+            // Populate the select element with options
             students.forEach(student => {
                 const option = document.createElement('option');
                 option.value = student.email;
-                option.text = `${student.name} - ${student.username}`;
+                option.text = `${student.name} - ${student.email}`;
                 selectEtudiants.appendChild(option);
             });
         } else {
@@ -74,14 +81,40 @@ async function TableOfStudent() {
         }
 
         selectEtudiants.addEventListener('change', async () => {
-            // Redirect directly to the /profil page
-            const profilePageUrl = `/profil`;
-            Navigate(profilePageUrl);
+        
+            const selectedStudentEmail = selectEtudiants.value;
+        
+            if (selectedStudentEmail) {
+                try {
+                    // Récupérer la liste des étudiants depuis l'API
+                    const studentsResponse = await fetch('/api/users');
+                    const studentsData = await studentsResponse.json();
+        
+                    // Trouver l'étudiant sélectionné
+                    const selectedStudent = studentsData.find(student => student.email === selectedStudentEmail);
+        
+                    if (selectedStudent) {
+                        // Mettre à jour la valeur de canAccessSite pour l'étudiant sélectionné
+                        selectedStudent.canAccessSite = false;
+        
+                        
+                        modificationOfStudentAccessInfo(selectedStudent.email);
+                        // Effectuer d'autres actions si nécessaire
+                    } else {
+                        console.error('Student not found');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                }
+            }
         });
-    } catch (error) {
+        } catch (error) {
         console.error('Erreur lors de la récupération des étudiants', error);
     }
 }
+
+
+
 
 
 
@@ -132,30 +165,34 @@ function graphForNumberVisit() {
 
 
 // ----------------------------------------------
-function numberOfStudent() {
-    // Create container for student information
-    const studentInfoContainer = document.createElement('div');
-    studentInfoContainer.className = 'bulle-info';
+async function viewNumberOfStudent() {
+    try {
+        const nbre = await fetchNumberOfStudents();  
+        const studentInfoContainer = document.createElement('div');
+        studentInfoContainer.className = 'bulle-info';
 
-    // Create heading element for "Étudiant"
-    const heading = document.createElement('h5');
-    heading.textContent = 'Étudiant';
+        // Create heading element for "Étudiant"
+        const heading = document.createElement('h5');
+        heading.textContent = 'Étudiant';
 
-    // Create span element with yellow text
-    const spanElement = document.createElement('span');
-    spanElement.style.color = '#fbc72c';
-    spanElement.textContent = '459';
+        // Create span element with yellow text
+        const spanElement = document.createElement('span');
+        spanElement.style.color = '#fbc72c';
+        spanElement.textContent = nbre;
 
-    // Create heading element for the student count
-    const studentCountHeading = document.createElement('h3');
-    studentCountHeading.appendChild(spanElement);
+        // Create heading element for the student count
+        const studentCountHeading = document.createElement('h3');
+        studentCountHeading.appendChild(spanElement);
 
-    // Append elements to the studentInfoContainer
-    studentInfoContainer.appendChild(heading);
-    studentInfoContainer.appendChild(studentCountHeading);
+        // Append elements to the studentInfoContainer
+        studentInfoContainer.appendChild(heading);
+        studentInfoContainer.appendChild(studentCountHeading);
 
-    // Append the studentInfoContainer to the main element or another target element
-    main.appendChild(studentInfoContainer);
+        // Append the studentInfoContainer to the main element or another target element
+        main.appendChild(studentInfoContainer);
+    }catch (error) {
+        console.error('Erreur lors de la récupération des étudiants', error);
+    } 
 }
 
 
@@ -208,10 +245,9 @@ function annoucementForm() {
     // Finally, append divAnnouncement to the main element or another target element
     main.appendChild(divAnnouncement);
 
+
     
-
-    console.log("--2");
-
+    
    // Add submit event listener to the form
    form.addEventListener('submit', (event) => {
     console.log("--3");
@@ -227,44 +263,52 @@ function annoucementForm() {
 });
 }
 function displayPopup(title, content) {
-    // Create popup container
-    const popup = document.createElement('div');
-    popup.className = 'popup';
-    
+    const announcementShown = localStorage.getItem('announcementShown');
 
-    // Create popup content
-    const popupContent = document.createElement('div');
-    popupContent.className = 'popup-content';
+    // Vérifier si l'annonce a déjà été affichée
+    if (!announcementShown) {
+        // Créer popup container
+        const popup = document.createElement('div');
+        popup.className = 'popup';
 
-    // Create heading element
-    const heading = document.createElement('h2');
-    heading.textContent = title;
+        // Créer popup content
+        const popupContent = document.createElement('div');
+        popupContent.className = 'popup-content';
 
-    // Create paragraph element
-    const paragraph = document.createElement('p');
-    paragraph.textContent = content;
+        // Créer heading element
+        const heading = document.createElement('h2');
+        heading.textContent = title;
 
-    // Create close button
-    const closeButton = document.createElement('button');
-    closeButton.id = 'closePopup';
-    closeButton.textContent = 'Fermer';
+        // Créer paragraph element
+        const paragraph = document.createElement('p');
+        paragraph.textContent = content;
 
-    // Append elements to the popup content
-    popupContent.appendChild(heading);
-    popupContent.appendChild(paragraph);
-    popupContent.appendChild(closeButton);
+        // Créer close button
+        const closeButton = document.createElement('button');
+        closeButton.id = 'closePopup';
+        closeButton.textContent = 'Fermer';
 
-    // Append the popup content to the popup container
-    popup.appendChild(popupContent);
+        // Ajouter les éléments au contenu de la popup
+        popupContent.appendChild(heading);
+        popupContent.appendChild(paragraph);
+        popupContent.appendChild(closeButton);
 
-    // Append the popup container to the body
-    document.body.appendChild(popup);
+        // Ajouter le contenu de la popup au container de la popup
+        popup.appendChild(popupContent);
 
-    // Add click event listener to the close button
-    closeButton.addEventListener('click', () => {
-        document.body.removeChild(popup);
-    });
+        // Ajouter le container de la popup au body
+        document.body.appendChild(popup);
+
+        // Ajouter un gestionnaire d'événements pour fermer la popup
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(popup);
+
+            // Stocker l'état de l'annonce dans le stockage local
+            localStorage.setItem('announcementShown', 'true');
+        });
+    }
 }
+
 
 
 

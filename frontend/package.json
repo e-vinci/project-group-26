@@ -44,5 +44,9 @@
     "terser-webpack-plugin": "^5.3.6",
     "typewriter-effect": "^2.21.0",
     "webpack-merge": "^5.8.0"
-  }
+  },
+    "rules": {
+      "import/extensions": [".js", ".jsx"]
+    }
+  
 }

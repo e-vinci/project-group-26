@@ -1,4 +1,4 @@
-import addUser  from '../../models/users'
+import { addUser, getStudentAccessInfo }  from '../../models/users'
 
 import { msalConfig, loginRequest, myMSALObj } from './AzureConfig';
 import Navigate from '../Router/Navigate';
@@ -22,15 +22,45 @@ function selectAccount () {
     }
   }
 
-function handleResponse(response) {
+
+
+  async function handleResponse(response) {
     if (response !== null) {
         username = response.account.username;
+        const canAccessSite = await getStudentAccessInfo(username);
+        console.log(canAccessSite)        
         addUser(response.account);
-        showWelcomeMessage(username);
+
+        if (canAccessSite === true) {
+            console.log('L\'étudiant a accès au site.');
+            showWelcomeMessage(username);
+        } else {
+            console.log('L\'étudiant n\'a pas accès au site.');
+            Navigate('/notallowed');
+            console.log('L\'étudiant n\'a pas accès au site.');
+        }
     } else {
         selectAccount();
     }
 }
+
+function getTokenRedirect(request) {
+
+    request.account = myMSALObj.getAccountByUsername(username);
+
+    return myMSALObj.acquireTokenSilent(request)
+        .catch(error => {
+            console.warn("silent token acquisition fails. acquiring token using redirect");
+            if (error instanceof myMSALObj.InteractionRequiredAuthError) {
+                // fallback to interaction when silent call fails
+                return myMSALObj.acquireTokenRedirect(request);
+            }
+            return undefined
+        });
+}
+
+
+
 
 /**
  * A promise handler needs to be registered for handling the
@@ -80,5 +110,5 @@ function showWelcomeMessage(userName) {
 }
 
 
-export { signIn, signOut }
+export { signIn, signOut,getTokenRedirect }
 
