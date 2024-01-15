@@ -35,7 +35,7 @@ const Navbar = () => {
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" data-uri="/"><i class="bi bi-house"></i>Accueil</a>
-        </li>
+        </li>    
         <li class="nav-item">
           <a class="nav-link" data-uri="/upload"><i class="bi bi-upload"></i>Upload</a>
         </li>

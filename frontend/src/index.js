@@ -11,8 +11,6 @@ import Router from './Components/Router/Router';
 Navbar();
 HomePage();
 VinciGeniusPage();
-HomePage();
-VinciGeniusPage();
 Router();
 
 
